@@ -3,12 +3,8 @@
 
 package machine
 
-const (
-	LED = GPIO25
-
-	// Onboard crystal oscillator frequency, in MHz.
-	xoscFreq = 12 // MHz
-)
+// Onboard crystal oscillator frequency, in MHz.
+const xoscFreq = 12 // MHz
 
 // GPIO Pins
 const (
@@ -50,6 +46,8 @@ const (
 	A2 = GPIO28
 	A3 = GPIO29
 )
+
+const LED = GPIO25
 
 // I2C Pins.
 const (
