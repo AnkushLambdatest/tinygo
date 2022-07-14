@@ -4,7 +4,6 @@
 package machine
 
 import (
-	"device/arm"
 	"device/rp"
 	"machine/usb"
 	"runtime/interrupt"
@@ -207,6 +206,20 @@ func sendUSBPacket(ep uint32, data []byte, maxsize uint16) {
 
 func ReceiveUSBControlPacket() ([cdcLineInfoSize]byte, error) {
 	var b [cdcLineInfoSize]byte
+	ep := 0
+
+	usbDPSRAM.EPxBufferControl[ep].Out.SetBits(usbBuf0CtrlData1Pid)
+	usbDPSRAM.EPxBufferControl[ep].Out.SetBits(usbBuf0CtrlAvail)
+	for !usbDPSRAM.EPxBufferControl[ep].Out.HasBits(usbBuf0CtrlFull) {
+		// TODO: timeout
+	}
+
+	ctrl := usbDPSRAM.EPxBufferControl[ep].Out.Get()
+	usbDPSRAM.EPxBufferControl[ep].Out.Set(USBBufferLen & usbBuf0CtrlLenMask)
+	sz := ctrl & usbBuf0CtrlLenMask
+
+	copy(b[:], usbDPSRAM.EPxBuffer[ep].Buffer0[:sz])
+
 	return b, nil
 }
 
@@ -257,16 +270,6 @@ func sendStallViaEPIn(ep uint32) {
 	usbDPSRAM.EPxBufferControl[ep&0x7F].In.Set(val)
 	val |= uint32(usbBuf0CtrlStall)
 	usbDPSRAM.EPxBufferControl[ep&0x7F].In.Set(val)
-}
-
-// EnterBootloader should perform a system reset in preparation
-// to switch to the bootloader to flash new firmware.
-func EnterBootloader() {
-	arm.DisableInterrupts()
-
-	// TODO: Perform magic reset into bootloader
-
-	arm.SystemReset()
 }
 
 type USBDPSRAM struct {
