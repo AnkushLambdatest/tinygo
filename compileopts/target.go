@@ -23,45 +23,46 @@ import (
 // https://doc.rust-lang.org/nightly/nightly-rustc/rustc_target/spec/struct.TargetOptions.html
 // https://github.com/shepmaster/rust-arduino-blink-led-no-core-with-cargo/blob/master/blink/arduino.json
 type TargetSpec struct {
-	Inherits         []string `json:"inherits"`
-	Triple           string   `json:"llvm-target"`
-	CPU              string   `json:"cpu"`
-	Features         string   `json:"features"`
-	GOOS             string   `json:"goos"`
-	GOARCH           string   `json:"goarch"`
-	BuildTags        []string `json:"build-tags"`
-	GC               string   `json:"gc"`
-	Scheduler        string   `json:"scheduler"`
-	Serial           string   `json:"serial"` // which serial output to use (uart, usb, none)
-	Linker           string   `json:"linker"`
-	RTLib            string   `json:"rtlib"` // compiler runtime library (libgcc, compiler-rt)
-	Libc             string   `json:"libc"`
-	AutoStackSize    *bool    `json:"automatic-stack-size"` // Determine stack size automatically at compile time.
-	DefaultStackSize uint64   `json:"default-stack-size"`   // Default stack size if the size couldn't be determined at compile time.
-	CFlags           []string `json:"cflags"`
-	LDFlags          []string `json:"ldflags"`
-	LinkerScript     string   `json:"linkerscript"`
-	ExtraFiles       []string `json:"extra-files"`
-	RP2040BootPatch  *bool    `json:"rp2040-boot-patch"` // Patch RP2040 2nd stage bootloader checksum
-	Emulator         string   `json:"emulator"`
-	FlashCommand     string   `json:"flash-command"`
-	GDB              []string `json:"gdb"`
-	PortReset        string   `json:"flash-1200-bps-reset"`
-	SerialPort       []string `json:"serial-port"` // serial port IDs in the form "acm:vid:pid" or "usb:vid:pid"
-	FlashMethod      string   `json:"flash-method"`
-	FlashVolume      string   `json:"msd-volume-name"`
-	FlashFilename    string   `json:"msd-firmware-name"`
-	UF2FamilyID      string   `json:"uf2-family-id"`
-	BinaryFormat     string   `json:"binary-format"`
-	OpenOCDInterface string   `json:"openocd-interface"`
-	OpenOCDTarget    string   `json:"openocd-target"`
-	OpenOCDTransport string   `json:"openocd-transport"`
-	OpenOCDCommands  []string `json:"openocd-commands"`
-	OpenOCDVerify    *bool    `json:"openocd-verify"` // enable verify when flashing with openocd
-	JLinkDevice      string   `json:"jlink-device"`
-	CodeModel        string   `json:"code-model"`
-	RelocationModel  string   `json:"relocation-model"`
-	WasmAbi          string   `json:"wasm-abi"`
+	Inherits           []string `json:"inherits"`
+	Triple             string   `json:"llvm-target"`
+	CPU                string   `json:"cpu"`
+	Features           string   `json:"features"`
+	GOOS               string   `json:"goos"`
+	GOARCH             string   `json:"goarch"`
+	BuildTags          []string `json:"build-tags"`
+	GC                 string   `json:"gc"`
+	Scheduler          string   `json:"scheduler"`
+	Serial             string   `json:"serial"` // which serial output to use (uart, usb, none)
+	Linker             string   `json:"linker"`
+	RTLib              string   `json:"rtlib"` // compiler runtime library (libgcc, compiler-rt)
+	Libc               string   `json:"libc"`
+	AutoStackSize      *bool    `json:"automatic-stack-size"` // Determine stack size automatically at compile time.
+	DefaultStackSize   uint64   `json:"default-stack-size"`   // Default stack size if the size couldn't be determined at compile time.
+	CFlags             []string `json:"cflags"`
+	LDFlags            []string `json:"ldflags"`
+	LinkerScript       string   `json:"linkerscript"`
+	ExtraFiles         []string `json:"extra-files"`
+	RP2040BootPatch    *bool    `json:"rp2040-boot-patch"` // Patch RP2040 2nd stage bootloader checksum
+	Emulator           string   `json:"emulator"`
+	FlashCommand       string   `json:"flash-command"`
+	GDB                []string `json:"gdb"`
+	PortReset          string   `json:"flash-1200-bps-reset"`
+	PortResetIgnoreErr string   `json:"flash-1200-bps-reset-ignore-error"`
+	SerialPort         []string `json:"serial-port"` // serial port IDs in the form "acm:vid:pid" or "usb:vid:pid"
+	FlashMethod        string   `json:"flash-method"`
+	FlashVolume        string   `json:"msd-volume-name"`
+	FlashFilename      string   `json:"msd-firmware-name"`
+	UF2FamilyID        string   `json:"uf2-family-id"`
+	BinaryFormat       string   `json:"binary-format"`
+	OpenOCDInterface   string   `json:"openocd-interface"`
+	OpenOCDTarget      string   `json:"openocd-target"`
+	OpenOCDTransport   string   `json:"openocd-transport"`
+	OpenOCDCommands    []string `json:"openocd-commands"`
+	OpenOCDVerify      *bool    `json:"openocd-verify"` // enable verify when flashing with openocd
+	JLinkDevice        string   `json:"jlink-device"`
+	CodeModel          string   `json:"code-model"`
+	RelocationModel    string   `json:"relocation-model"`
+	WasmAbi            string   `json:"wasm-abi"`
 }
 
 // overrideProperties overrides all properties that are set in child into itself using reflection.
