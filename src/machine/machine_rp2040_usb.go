@@ -152,7 +152,8 @@ func initEndpoint(ep, config uint32) {
 
 	case usb.ENDPOINT_TYPE_CONTROL:
 		val |= usbEpControlEndpointTypeControl
-		usbDPSRAM.EPxBufferControl[ep].Out.Set(usbBuf0CtrlAvail)
+		usbDPSRAM.EPxBufferControl[ep].Out.Set(usbBuf0CtrlData1Pid)
+		usbDPSRAM.EPxBufferControl[ep].Out.SetBits(usbBuf0CtrlAvail)
 
 	}
 }
@@ -208,8 +209,6 @@ func ReceiveUSBControlPacket() ([cdcLineInfoSize]byte, error) {
 	var b [cdcLineInfoSize]byte
 	ep := 0
 
-	usbDPSRAM.EPxBufferControl[ep].Out.SetBits(usbBuf0CtrlData1Pid)
-	usbDPSRAM.EPxBufferControl[ep].Out.SetBits(usbBuf0CtrlAvail)
 	for !usbDPSRAM.EPxBufferControl[ep].Out.HasBits(usbBuf0CtrlFull) {
 		// TODO: timeout
 	}
@@ -219,6 +218,9 @@ func ReceiveUSBControlPacket() ([cdcLineInfoSize]byte, error) {
 	sz := ctrl & usbBuf0CtrlLenMask
 
 	copy(b[:], usbDPSRAM.EPxBuffer[ep].Buffer0[:sz])
+
+	usbDPSRAM.EPxBufferControl[ep].Out.SetBits(usbBuf0CtrlData1Pid)
+	usbDPSRAM.EPxBufferControl[ep].Out.SetBits(usbBuf0CtrlAvail)
 
 	return b, nil
 }
@@ -231,7 +233,7 @@ func handleEndpointRx(ep uint32) []byte {
 	copy(buf, usbDPSRAM.EPxBuffer[ep].Buffer0[:sz])
 
 	epXdata0[ep] = !epXdata0[ep]
-	if epXdata0[ep] {
+	if epXdata0[ep] || ep == 0 {
 		usbDPSRAM.EPxBufferControl[ep].Out.SetBits(usbBuf0CtrlData1Pid)
 	}
 
